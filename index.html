@@ -1728,7 +1728,7 @@ function excluirItemEstrutura(refProd, tipo, key, btnEl){
 }
 
 // ── Handlers de arquivo CSV ───────────────────────────────────────────────────
-let csvEstrBuffer = '';
+window.window.csvEstrBuffer = '';
 
 function handleDropEstr(e){
   e.preventDefault();
@@ -1754,7 +1754,7 @@ function readCsvEstr(file){
     let txt = ev.target.result;
     // Remove BOM se presente
     if(txt.charCodeAt(0)===0xFEFF) txt = txt.slice(1);
-    csvEstrBuffer = txt;
+    window.csvEstrBuffer = txt;
     if(dropEl) dropEl.innerHTML = `<span style="font-size:12px;font-weight:600;color:var(--green)">✅ ${file.name} — ${txt.length} bytes carregados. Clique em IMPORTAR.</span>`;
     if(msgEl){ msgEl.textContent=''; }
     console.log('CSV carregado:', file.name, txt.length, 'chars');
@@ -1763,7 +1763,7 @@ function readCsvEstr(file){
 
   reader.onerror = () => {
     if(dropEl) dropEl.innerHTML = `<span style="font-size:12px;font-weight:600;color:var(--red)">❌ Erro ao ler o arquivo</span>`;
-    csvEstrBuffer = '';
+    window.csvEstrBuffer = '';
   };
 
   // Tenta UTF-8 com BOM primeiro
@@ -1774,7 +1774,7 @@ function readCsvEstr(file){
   }
 }
 function processarCsvEstr(){
-  if(!csvEstrBuffer){
+  if(!window.csvEstrBuffer){
     const msg = document.getElementById('msgEstr');
     if(msg){ msg.textContent='⚠ Selecione um arquivo CSV primeiro.'; msg.style.color='var(--red)'; }
     return;
@@ -1782,22 +1782,22 @@ function processarCsvEstr(){
   const mes  = document.getElementById('selMesEstr').value;
   const ano  = document.getElementById('selAnoEstr').value;
   const mesRef = mes+'/'+ano;
-  console.log('Processando CSV, tamanho:', csvEstrBuffer.length);
-  console.log('Primeiras 200 chars:', csvEstrBuffer.substring(0,200));
-  const parsed = parseEstruturaCsv(csvEstrBuffer);
+  console.log('Processando CSV, tamanho:', window.csvEstrBuffer.length);
+  console.log('Primeiras 200 chars:', window.csvEstrBuffer.substring(0,200));
+  const parsed = parseEstruturaCsv(window.csvEstrBuffer);
   console.log('Parsed produtos:', parsed.length, parsed.map(p=>p.ref));
-  const count  = importarEstruturaCsv(csvEstrBuffer, mesRef);
+  const count  = importarEstruturaCsv(window.csvEstrBuffer, mesRef);
   const msg = document.getElementById('msgEstr');
   if(msg){
     if(count > 0){
       msg.textContent = `✅ ${count} produto(s) importado(s) para ${mesRef}. Atualizando...`;
       msg.style.color = 'var(--green)';
     } else {
-      msg.textContent = `⚠ Nenhum produto encontrado. Buffer: ${csvEstrBuffer.length} chars. Verifique o Console (F12).`;
+      msg.textContent = `⚠ Nenhum produto encontrado. Buffer: ${window.csvEstrBuffer.length} chars. Verifique o Console (F12).`;
       msg.style.color = 'var(--red)';
     }
   }
-  csvEstrBuffer = '';
+  window.csvEstrBuffer = '';
   const fi = document.getElementById('fileEstr');
   if(fi) fi.value = '';
   if(count > 0){
