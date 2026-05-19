@@ -1300,7 +1300,7 @@ function parseEstruturaCsv(txt){
     if(line.startsWith('Produto:')){
       flushProd();
       const refM  = line.match(/Refer.{1,5}:\s*([^\s\-]+)/);
-      const descM = line.match(/Descri.{1,5}:\s*(.+)\s*-\s*Grupo/);
+      const descM = line.match(/Descri.{1,5}:\\s*(.+?)\\s*(?:-\\s*Grupo|;|$)/);
       const codM  = line.match(/Produto:\s*Produto:\s*(\d+)/);
       currentProd = {
         cod:  codM  ? codM[1].trim()  : '',
