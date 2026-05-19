@@ -1267,8 +1267,8 @@ function sortMesesEstr(meses){
 }
 
 function salvarEstruturas(){
-  try{ localStorage.setItem('estruturas_prod', JSON.stringify(ESTRUTURAS)); }catch(e){}
-  sincronizarServidor({ estruturas_prod: ESTRUTURAS });
+  try{ localStorage.setItem('estruturas_prod', JSON.stringify(ESTRUTURAS)); }catch(e){ console.warn('quota'); }
+  clearTimeout(_syncTimer); _pushSupabase({ estruturas_prod: ESTRUTURAS });
 }
 function carregarEstruturas(){
   try{
