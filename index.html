@@ -1347,10 +1347,12 @@ function parseEstruturaCsv(txt){
 
 function importarEstruturaCsv(txt, mesRef){
   const parsed = parseEstruturaCsv(txt);
+  console.log('importarEstruturaCsv — parsed:', parsed.length, 'mesRef:', mesRef);
   if(!parsed.length) return 0;
   let count = 0;
   parsed.forEach(p => {
     const ref = p.ref || p.cod;
+    console.log('  produto ref:', ref, 'cod:', p.cod, 'desc:', (p.desc||'').substring(0,30), 'mpItems:', p.mpItems.length);
     if(!ref) return;
     if(!ESTRUTURAS[ref]) ESTRUTURAS[ref] = { cod:p.cod, desc:p.desc, meses:{} };
     // Sempre atualiza cod e desc
